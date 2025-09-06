@@ -1,0 +1,29 @@
+import numpy as np
+
+def step1_row_reduction(M):
+    M = M.astype(float).copy() 
+    row_mins = M.min(axis=1, keepdims=True)
+    return M - row_mins
+
+def step2_col_reduction(M):
+   M = M.astype(float).copy()
+   col_mins = M.min(axis=0, keepdims=True)
+   return M - col_mins 
+
+def step4_adjust_matrix(M, row_covered, col_covered):
+    M = M.astype(float).copy()
+    # mask of entries not covered by any line
+    uncovered = (~row_covered)[:, None] & (~col_covered)[None, :]
+    if not np.any(uncovered):
+        return M  # nothing to adjust
+
+    m = M[uncovered].min()
+
+    # subtract from uncovered entries
+    M[uncovered] -= m
+
+    # add to intersections of covered rows & covered columns
+    intersections = (row_covered[:, None] & col_covered[None, :])
+    M[intersections] += m
+
+    return M
