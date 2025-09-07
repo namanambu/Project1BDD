@@ -1,17 +1,14 @@
 import numpy as np
 
 '''
-   * Function iteratively determines the minimal number of "lines" 
-   * to be made in the reduced cost matrix in order to mark all zeros.
-   * Let R, C, and Z be integers such that 0 </= int </= N
-   * @param "mat" is the reduced, square cost matrix (N x N)
-   * @return "marked_rows" 1D np array of rows through which a "line" is made (len = R)
-   * @return "marked_cols" 1D np array of columns through which a "line" is made (len = C)
-   * @return "marked_zero" 2D np array of indices of all zeros in reduced matrix (Z x 2)
+   * Helper function to systematically mark the first zero occurence
+   * In each row.  Starting from smallest num of zeros.
+   * @param "zero_mat" Copy of boolean matrix (N x N)
+   * @return "mark_zero" empty 1D np array to contain set of marked zeros
    '''
 def min_zero_row(zero_mat, mark_zero):
     
-    min_row = [99999, -1] # Outlandish but idk how big a matrix we'll use
+    min_row = [99999, -1] # [num_zeros, row_ind]
 
     for row_num in range(zero_mat.shape[0]): 
         if np.sum(zero_mat[row_num] == True) > 0 and min_row[0] > np.sum(zero_mat[row_num] == True):
@@ -19,20 +16,21 @@ def min_zero_row(zero_mat, mark_zero):
 
     # Marked the specific row and column as False
     zero_index = np.where(zero_mat[min_row[1]] == True)[0][0]
-    mark_zero.append((min_row[1], zero_index))
-    zero_mat[min_row[1], :] = False
+    mark_zero.append((min_row[1], zero_index)) # Mark the first zero in this row
+    
+    # Make all values in corresponding row and column False to proceed
+    zero_mat[min_row[1], :] = False 
     zero_mat[:, zero_index] = False
 
 '''
    * Function iteratively determines the minimal number of "lines" 
    * to be made in the reduced cost matrix in order to mark all zeros.
    * Let R, C, and Z be integers such that 0 </= int </= N
-   * @param "mat" is the reduced, square cost matrix (N x N)
+   * @param "mat" 2D np array for the reduced, square cost matrix (N x N)
    * @return "marked_rows" 1D np array of rows through which a "line" is made (len = R)
    * @return "marked_cols" 1D np array of columns through which a "line" is made (len = C)
    * @return "marked_zero" 2D np array of indices of all zeros in reduced matrix (Z x 2)
    '''
-
 def Step_3_Line_Check(mat):
 
     # Matrix --> Boolean Matrix (0 True, else False)
@@ -40,7 +38,7 @@ def Step_3_Line_Check(mat):
     zero_bool_mat = (current_mat == 0)
     zero_bool_mat_copy = zero_bool_mat.copy()
 
-    # Find the indices of zeros in the matrix
+    # Find the indices of zeros in the matrix (only the first in each row)
     marked_zero = []
     while (True in zero_bool_mat_copy):
         min_zero_row(zero_bool_mat_copy, marked_zero)
@@ -81,7 +79,6 @@ def Step_3_Line_Check(mat):
 
 matrix = np.random.choice(np.arange(15, dtype=np.int32), 
                           size=(4, 4), replace=True)
-#print(matrix)
 num_cols = matrix.shape[1]
 num_rows = matrix.shape[0]
 
