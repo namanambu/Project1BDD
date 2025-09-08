@@ -83,12 +83,11 @@ num_cols = matrix.shape[1]
 num_rows = matrix.shape[0]
 
 
-
 '''
  This section of code is technically someone else's
     part, but I needed to have 0's consistently.
     It DOES NOT WORK!
-'''
+
 for row in matrix:  
     row -= min(row)
 
@@ -99,7 +98,7 @@ for col_ind in range (0, num_cols):
 
 [row_lines, col_lines, marked_zeros] = Step_3_Line_Check(matrix)
 
-print(row_lines, col_lines, marked_zeros)
+#print(row_lines, col_lines, marked_zeros)
 
 if len(row_lines) + len(col_lines) == len(matrix):  # Skip to Step 5
     #step_5_blabla()
@@ -109,3 +108,4 @@ else: # Go to Step 4
     print("step4")
 
 
+'''

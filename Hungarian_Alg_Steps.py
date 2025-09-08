@@ -33,19 +33,19 @@ def step4_adjust_matrix(M, row_covered, col_covered):
       - add m to cells at COVERED row ∩ COVERED col
     Then go back to Step 3 and try again.
     """
-    M = M.astype(float).copy()
-    # cells with NO row line and NO column line = "uncovered"
-    uncovered = (~row_covered)[:, None] & (~col_covered)[None, :]
-    if not np.any(uncovered):
-        return M  # nothing to adjust
-    
-    m = M[uncovered].min() # m = smallest number sitting in the uncovered region
+  M = M.astype(float).copy()
+  # cells with NO row line and NO column line = "uncovered"
+  uncovered = (~row_covered)[:, None] & (~col_covered)[None, :]
+  if not np.any(uncovered):
+      return M  # nothing to adjust
+  
+  m = M[uncovered].min() # m = smallest number sitting in the uncovered region
 
-    # subtract from uncovered entries, at least one of them becomes 0
-    M[uncovered] -= m
+  # subtract from uncovered entries, at least one of them becomes 0
+  M[uncovered] -= m
 
-    # add to intersections of covered rows & covered columns
-    intersections = (row_covered[:, None] & col_covered[None, :])
-    M[intersections] += m
+  # add to intersections of covered rows & covered columns
+  intersections = (row_covered[:, None] & col_covered[None, :])
+  M[intersections] += m
 
-    return M
+  return M
