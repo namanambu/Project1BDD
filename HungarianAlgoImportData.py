@@ -13,7 +13,7 @@ def get_hospital_info(df):
         df (DataFrame): the raw imported data from csv file
 
     Returns:
-        hospital (number of hospitals +1, 0): : the hos
+        hospital (number of hospitals, 0): : the hos
     """
     hospital_info = df[:1]
     hospital_info = hospital_info.drop('Hospital', axis= 1)
@@ -91,6 +91,7 @@ def final_solution(raw_data, finished_matrix):
         doctor_id = row[i]
         hospital_id = col[i]
         print(doctors[doctor_id+1], "goes to", hospital_info[hospital_id])
+
 
 
     
