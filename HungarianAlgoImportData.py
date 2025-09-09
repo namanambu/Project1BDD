@@ -93,8 +93,6 @@ def final_solution(raw_data, finished_matrix):
         print(doctors[doctor_id+1], "goes to", hospital_info[hospital_id])
 
 
-
-
     
 
 
