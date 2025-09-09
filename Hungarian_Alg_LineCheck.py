@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 '''
    * Helper function to systematically mark the first zero occurence
@@ -76,36 +77,90 @@ def Step_3_Line_Check(mat):
     
     return np.array(marked_rows), np.array(marked_cols), np.array(marked_zero)
 
+'''
+    * Function for determining the optimal assignment of rows (doctors) to columns (hospitals) 
+    * based on the indices of zeros in a cost matrix. The goal is to assign rows to columns while meeting
+    * constraints, such as assigning only unmatched rows and columns at each step to avoid repeats.
+    * Let R, C, and Z be integers such that 0 </= int </= N (total rows, columns, and zeros in matrix).
+    * @param "zero_inds" 2D list of indices (Z x 2) of all zeros in the matrix. Each entry is [row_index, col_index].
+    * @return "assignments" 2D list of pairs [row, col] representing the solution to the assignment problem.
+    '''
+def STEP5_find_solution(zero_inds):
+    
+    
+    rows = []
+    cols = []
 
-matrix = np.random.choice(np.arange(15, dtype=np.int32), 
-                          size=(4, 4), replace=True)
-num_cols = matrix.shape[1]
-num_rows = matrix.shape[0]
+    for i in range(len(zero_inds)):
+        rows.append(zero_inds[i][0])
+        cols.append(zero_inds[i][1])
 
+    assignments = []
+    matched_rows = []
+    matched_cols = []
+    unmatched_rows = []
+
+    round_min = 1
+    for i in range(len(zero_inds)):
+        row = rows[i]
+        if sum(rows == row) == 1:
+            assignments.append([row, cols[i]])
+            matched_rows.append(row)
+            matched_cols.append(cols[i])
+        else:
+            unmatched_rows.append(row)
+            if sum(rows == row) < (round_min + 1): 
+                round_min = sum(rows == row)
+            else:
+                round_min += 1
+
+    new_matches = 0
+    while len(set(unmatched_rows)) != new_matches: 
+        for row in unmatched_rows:
+            if row not in matched_rows:
+                indices = [i for i in range(len(rows)) if rows[i] == row]
+                for index in indices:
+                    if (sum(rows == row) <= round_min) and (cols[index] not in matched_cols):
+                        assignments.append([row, cols[index]])
+                        matched_rows.append(row)
+                        matched_cols.append(cols[index])
+                        new_matches += 1
+                        unmatched_rows.remove(row)
+                        break
+        rows_with_zeros = [row for row in unmatched_rows if rows.count(row) > 0]
+        if rows_with_zeros:  # If unmatched rows remain
+            round_min = min(rows.count(row) for row in rows_with_zeros)  # Find the next lowest threshold
+        else:
+            break  # This is actually the only way the loop ends
+                    
+                
+
+    return assignments
 
 '''
- This section of code is technically someone else's
-    part, but I needed to have 0's consistently.
-    It DOES NOT WORK!
+    * Function iteratively processes assignment pairs from Step 5 and maps them to doctors and hospital positions
+    * from the prepped, padded square cost matrix. Each assignment identifies the matched doctor and hospital index.
+    * Let R and C be integers such that 0 </= int </= M (number of doctors and positions in the prepped matrix)
+    * @param "assignments" 2D list or np.ndarray where each pair (row, col) represents a match of doctor to hospital
+    * @param "prepped_data" pandas DataFrame for the square, padded cost matrix with rows as doctors (MxN)
+    * @return "matches_df" pandas DataFrame with matched doctors and hospital positions 
+    *                      Columns: ['Doctor', 'Hospital Position']
+    '''
+def Match_Residents(assignments, prepped_data):
 
-for row in matrix:  
-    row -= min(row)
+    doctor_names = list(prepped_data.index)   # Doctor indices or names
+    hospital_names = list(prepped_data.columns)  # Hospital position names
 
-for col_ind in range (0, num_cols):
-    col = matrix[:,col_ind]
-    col -= min(col)
+    # Process assignments to create a matches list
+    matches = []
+    for row, col in assignments:
+        doctor = doctor_names[row]  # Get doctor label from the row
+        hospital = hospital_names[col]  # Get hospital position label from the column
 
+        # Append the match as a dictionary
+        matches.append({"Doctor": doctor, "Hospital Position": hospital})
 
-[row_lines, col_lines, marked_zeros] = Step_3_Line_Check(matrix)
+    # Convert matches list to a DataFrame
+    matches_df = pd.DataFrame(matches)
 
-#print(row_lines, col_lines, marked_zeros)
-
-if len(row_lines) + len(col_lines) == len(matrix):  # Skip to Step 5
-    #step_5_blabla()
-    print("step5")
-else: # Go to Step 4
-    #step4_adjust_matrix(matrix, row_lines, col_lines)
-    print("step4")
-
-
-'''
+    return matches_df
