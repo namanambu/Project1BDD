@@ -91,23 +91,25 @@ def STEP5_find_solution(zero_inds):
     rows = []
     cols = []
 
+    # Separate the indices into their column and row components
     for i in range(len(zero_inds)):
         rows.append(zero_inds[i][0])
         cols.append(zero_inds[i][1])
 
+    # Vars to track progress
     assignments = []
     matched_rows = []
     matched_cols = []
     unmatched_rows = []
 
-    round_min = 1
+    round_min = 1 # The amount of 0s a row can have to be match eligible this time
     for i in range(len(zero_inds)):
         row = rows[i]
-        if sum(rows == row) == 1:
+        if sum(rows == row) == 1: # Then proceed to assign them
             assignments.append([row, cols[i]])
             matched_rows.append(row)
             matched_cols.append(cols[i])
-        else:
+        else: # They have too many options --> wait
             unmatched_rows.append(row)
             if sum(rows == row) < (round_min + 1): 
                 round_min = sum(rows == row)
@@ -115,12 +117,12 @@ def STEP5_find_solution(zero_inds):
                 round_min += 1
 
     new_matches = 0
-    while len(set(unmatched_rows)) != new_matches: 
+    while len(set(unmatched_rows)) != new_matches: # Set because we'll have repeats
         for row in unmatched_rows:
             if row not in matched_rows:
                 indices = [i for i in range(len(rows)) if rows[i] == row]
                 for index in indices:
-                    if (sum(rows == row) <= round_min) and (cols[index] not in matched_cols):
+                    if (sum(rows == row) <= round_min) and (cols[index] not in matched_cols): # Prevent more than 1 match per place
                         assignments.append([row, cols[index]])
                         matched_rows.append(row)
                         matched_cols.append(cols[index])
