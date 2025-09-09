@@ -143,21 +143,25 @@ def STEP5_find_solution(zero_inds):
     * Let R and C be integers such that 0 </= int </= M (number of doctors and positions in the prepped matrix)
     * @param "assignments" 2D list or np.ndarray where each pair (row, col) represents a match of doctor to hospital
     * @param "prepped_data" pandas DataFrame for the square, padded cost matrix with rows as doctors (MxN)
+    * @param "num_doctors" integer with the number of doctors we are trying to match
     * @return "matches_df" pandas DataFrame with matched doctors and hospital positions 
     *                      Columns: ['Doctor', 'Hospital Position']
     '''
-def Match_Residents(assignments, prepped_data):
+def Match_Residents(assignments, prepped_data, num_doctors):
 
-    doctor_names = list(prepped_data.index)   # Doctor indices or names
-    hospital_names = list(prepped_data.columns)  # Hospital position names
+    doctor_names = list(prepped_data.index[:num_doctors])  # First `num_doctors` rows, rest are extra
+    hospital_names = list(prepped_data.columns) 
 
-    # Process assignments to create a matches list
+    # Filter assignments to only include actual doctors (rows < num_doctors)
+    filtered_assignments = [pair for pair in assignments if pair[0] < num_doctors]
+
+    # Prepare list of matches
     matches = []
-    for row, col in assignments:
-        doctor = doctor_names[row]  # Get doctor label from the row
-        hospital = hospital_names[col]  # Get hospital position label from the column
+    for row, col in filtered_assignments:
+        doctor = doctor_names[row]  # Map row index to actual doctor name
+        hospital = hospital_names[col]  # Map column index to hospital position name
 
-        # Append the match as a dictionary
+        # Append to matches list
         matches.append({"Doctor": doctor, "Hospital Position": hospital})
 
     # Convert matches list to a DataFrame
