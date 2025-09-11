@@ -34,7 +34,7 @@ def step4_adjust_matrix(M, row_covered, col_covered):
     Then go back to Step 3 and try again.
     """
   M = M.astype(float).copy()
-  # cells with NO row line and NO column line = "uncovered"
+  # Cells with NO row line and NO column line = "uncovered"
   uncovered = (~row_covered)[:, None] & (~col_covered)[None, :]
   if not np.any(uncovered):
       return M  # nothing to adjust
