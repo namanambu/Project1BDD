@@ -139,6 +139,7 @@ def STEP5_find_solution(zero_inds):
 
     return assignments
 
+
 '''
     * Function iteratively processes assignment pairs from Step 5 and maps them to doctors and hospital positions
     * from the prepped, padded square cost matrix. Each assignment identifies the matched doctor and hospital index.
@@ -149,15 +150,21 @@ def STEP5_find_solution(zero_inds):
     * @return "matches_df" pandas DataFrame with matched doctors and hospital positions 
     *                      Columns: ['Doctor', 'Hospital Position']
     '''
-def Match_Residents(assignments, prepped_data, num_doctors):
+def match_residents(assignments, raw_data):
+    import HungarianAlgoImportData as HAID
+    # Get the number of actual doctors and hospital columns from the data
+    doctors = HAID.get_doctors(raw_data)
+    prepped_data = HAID.prep_data(raw_data)
+    num_doctors = len(doctors)  # Exclude filler
 
-    doctor_names = list(prepped_data.index[:num_doctors])  # First `num_doctors` rows, rest are extra
-    hospital_names = list(prepped_data.columns) 
+    # Extract doctor and hospital names (note the hospital names will have position iteration)
+    doctor_names = doctors.values  # Actual doctor names from raw data
+    hospital_names = list(prepped_data.columns)  # Valid hospital columns only
 
-    # Filter assignments to only include actual doctors (rows < num_doctors)
+    # Filter assignments to only include rows corresponding to actual doctors
     filtered_assignments = [pair for pair in assignments if pair[0] < num_doctors]
 
-    # Prepare list of matches
+    # Prepare matches list
     matches = []
     for row, col in filtered_assignments:
         doctor = doctor_names[row]  # Map row index to actual doctor name
@@ -166,7 +173,7 @@ def Match_Residents(assignments, prepped_data, num_doctors):
         # Append to matches list
         matches.append({"Doctor": doctor, "Hospital Position": hospital})
 
-    # Convert matches list to a DataFrame
+    # Convert matches to a DataFrame
     matches_df = pd.DataFrame(matches)
 
     return matches_df
