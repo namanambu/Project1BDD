@@ -74,12 +74,16 @@ def prep_data(raw_data):
 
 
 def get_score (prepped_df, solution_matrix):
+    #get the score from what the ranking was of the hospital the doctor got
     score = 0
     for index, row in solution_matrix.iterrows():
         doctor = row['Doctor']
         hos = row['Hospital Position']
         score += prepped_df.at[doctor, hos]
-    return score 
+    #get the max score that could be achieved
+    max = prepped_df.max(axis=1)
+    max_total = max.sum()
+    return score, max_total
     
 
 
