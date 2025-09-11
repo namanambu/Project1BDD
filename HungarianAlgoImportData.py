@@ -72,26 +72,15 @@ def prep_data(raw_data):
 
 
 
-def final_solution(raw_data, finished_matrix):
-    """prints out the final solution
 
-    Args:
-        raw_data (df): the data from the import_data function
-        finished_matrix (df): the matrix after the hungarian algorithm was completed 
-    """
-    #get row and column indicies
-    #row is the doctor indictor and column is the hospital
-    #doctors info indexes starting at one
-    row, col = np.where(finished_matrix == 0)
-    hospital_info = get_hospital_info(raw_data)
-    hospital_info = hospital_info.columns
-    doctors = get_doctors(raw_data)
-
-    for i in range(row):
-        doctor_id = row[i]
-        hospital_id = col[i]
-        print(doctors[doctor_id+1], "goes to", hospital_info[hospital_id])
-
+def get_score (prepped_df, solution_matrix):
+    score = 0
+    for index, row in solution_matrix.iterrows():
+        doctor = row['Doctor']
+        hos = row['Hospital Position']
+        score += prepped_df.at[doctor, hos]
+    return score 
+    
 
 
     
