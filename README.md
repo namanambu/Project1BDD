@@ -1,4 +1,5 @@
 Section 1: Background on Hungarian Algorithm and Objective
+
 The assignment problem is a classical optimization problem where the goal is to select the maximum matching with the lowest possible cost. In mathematical terms, it boils down to finding a minimum-weight matching in a bipartite graph, where each agent–task pairing carries a weight that reflects how suitable that match is. To solve this type of problem efficiently, Harold Kuhn published the Hungarian algorithm in 1955.[1] The method works by transforming the cost matrix through row and column reductions and iteratively uncovering zeros until an optimal set of pairings is reached.[2] In our project, we used this approach by converting doctors’ ranked hospital preferences into a cost matrix and applying the algorithm to generate assignments that minimize overall dissatisfaction while respecting hospital capacity limits.
 
 Section 2: Model Assumptions
