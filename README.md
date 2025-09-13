@@ -20,27 +20,27 @@ Section 2: Model Assumptions
 
 Section 3: Design Decisions
 
-a) We chose to represent the problem in a CSV file where each row corresponds to a doctor’s ranked preferences and the header row encodes hospital capacities. This made it easy to test with different datasets and use pandas for preprocessing.
-b)Hospitals with more than one slot are expanded into multiple columns, such as H1A and H1B, so that the problem becomes one-to-one and fits the Hungarian algorithm’s requirements[3]
-c) Because the Hungarian algorithm requires a square cost matrix, we padded the smaller dimension with dummy rows/columns. A special “no match” column was added to represent doctors who cannot be placed for cases where n is not equal to k 
-d) Doctors’ rankings were directly converted into costs (lower rank = lower cost). This makes the optimization objective “minimize cost” equivalent to “maximize doctor satisfaction.”
-e) We modularized the algorithm into steps based on a youtube video explanation of the algorithm which made the logic easier to debug and explain[4]:
-  Step 1: Row reduction
-  Step 2: Column reduction
-  Step 3: Identify zeros and cover them with minimal lines
-  Step 4: Adjust the matrix when coverage is insufficient
-  Step 5: Extract optimal assignments from zero positions
-f) We wrote helper functions to map matrix indices back to actual doctor and hospital names, and return results as a clean pandas data frame
-g) To evaluate results, we defined a scoring function that sums the rank costs of assigned matches and compares this to a maximum possible dissatisfaction score. This gave us a percentage measure of solution quality
-h) By separating data import, preprocessing, algorithm steps, and output formatting into different modules, we kept the code design flexible and easy to maintain
+- We chose to represent the problem in a CSV file where each row corresponds to a doctor’s ranked preferences and the header row encodes hospital capacities. This made it easy to test with different datasets and use pandas for preprocessing.
+- Hospitals with more than one slot are expanded into multiple columns, such as H1A and H1B, so that the problem becomes one-to-one and fits the Hungarian algorithm’s requirements[3]
+- Because the Hungarian algorithm requires a square cost matrix, we padded the smaller dimension with dummy rows/columns. A special “no match” column was added to represent doctors who cannot be placed for cases where n is not equal to k
+- Doctors’ rankings were directly converted into costs (lower rank = lower cost). This makes the optimization objective “minimize cost” equivalent to “maximize doctor satisfaction.”
+- We modularized the algorithm into steps based on a youtube video explanation of the algorithm which made the logic easier to debug and explain[4]:
+     - Step 1: Row reduction
+     - Step 2: Column reduction
+     - Step 3: Identify zeros and cover them with minimal lines
+     - Step 4: Adjust the matrix when coverage is insufficient
+     - Step 5: Extract optimal assignments from zero positions
+- We wrote helper functions to map matrix indices back to actual doctor and hospital names, and return results as a clean pandas data frame
+- To evaluate results, we defined a scoring function that sums the rank costs of assigned matches and compares this to a maximum possible dissatisfaction score. This gave us a percentage measure of solution quality
+- By separating data import, preprocessing, algorithm steps, and output formatting into different modules, we kept the code design flexible and easy to maintain
 
 Section 4: Labour Division
 
--- Sakshi worked on implementing Step 1 (row reduction), Step 2 (column reduction), and Step 4 (matrix adjustment) functions of the Hungarian algorithm. She also prepared this project write-up and developed testing functions to check that the code was running correctly
+- Sakshi worked on implementing Step 1 (row reduction), Step 2 (column reduction), and Step 4 (matrix adjustment) functions of the Hungarian algorithm. She also prepared this project write-up and developed testing functions to check that the code was running correctly
 
--- Jonathan focused on Step 3 of the Hungarian algorithm, which involved crossing out zeros and determining the minimum number of lines needed to cover them. He also put together the main demo script that showcased the full workflow of the algorithm on sample data
+- Jonathan focused on Step 3 of the Hungarian algorithm, which involved crossing out zeros and determining the minimum number of lines needed to cover them. He also put together the main demo script that showcased the full workflow of the algorithm on sample data
 
--- Nnemdi handled the initial data import and preprocessing, including setting up hospital capacities and padding the matrix so it could be used by the algorithm. In addition, she implemented Step 5 of the Hungarian algorithm, which extracted the final assignments of doctors to hospitals from the reduced cost matrix
+- Nnemdi handled the initial data import and preprocessing, including setting up hospital capacities and padding the matrix so it could be used by the algorithm. In addition, she implemented Step 5 of the Hungarian algorithm, which extracted the final assignments of doctors to hospitals from the reduced cost matrix
 
 Section 5: Organization of this Repository
 Our code is split into a few main pieces to keep things clean and easy to follow:
