@@ -19,6 +19,7 @@ Section 2: Model Assumptions
 - Hungarian is fine for small or medium test cases but could become slow for very large datasets
 
 Section 3: Design Decisions
+
 a) We chose to represent the problem in a CSV file where each row corresponds to a doctor’s ranked preferences and the header row encodes hospital capacities. This made it easy to test with different datasets and use pandas for preprocessing.
 b)Hospitals with more than one slot are expanded into multiple columns, such as H1A and H1B, so that the problem becomes one-to-one and fits the Hungarian algorithm’s requirements[3]
 c) Because the Hungarian algorithm requires a square cost matrix, we padded the smaller dimension with dummy rows/columns. A special “no match” column was added to represent doctors who cannot be placed for cases where n is not equal to k 
@@ -34,6 +35,7 @@ g) To evaluate results, we defined a scoring function that sums the rank costs o
 h) By separating data import, preprocessing, algorithm steps, and output formatting into different modules, we kept the code design flexible and easy to maintain
 
 Section 4: Labour Division
+
 -- Sakshi worked on implementing Step 1 (row reduction), Step 2 (column reduction), and Step 4 (matrix adjustment) functions of the Hungarian algorithm. She also prepared this project write-up and developed testing functions to check that the code was running correctly
 
 -- Jonathan focused on Step 3 of the Hungarian algorithm, which involved crossing out zeros and determining the minimum number of lines needed to cover them. He also put together the main demo script that showcased the full workflow of the algorithm on sample data
