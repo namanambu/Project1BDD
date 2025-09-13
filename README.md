@@ -53,7 +53,11 @@ Our code is split into a few main pieces to keep things clean and easy to follow
 - CSV files: different test datasets we used to check the algorithm
 
 References (cited):
+
 [1]The Hungarian Algorithm for the Assignment Problem. The Department of Computer Science. Accessed September 13, 2025. http://www.cs.emory.edu/~cheung/Courses/253/Syllabus/Assignment/algorithm.html.  
+
 [2]Efimov V. The Hungarian algorithm and its applications in computer vision. Towards Data Science. September 9, 2025. Accessed September 13, 2025. https://towardsdatascience.com/hungarian-algorithm-and-its-applications-in-computer-vision/.  
+
 [3]Hungarian algorithm for solving the assignment problem. Hungarian Algorithm - Algorithms for Competitive Programming. December 13, 2023. Accessed September 13, 2025. https://cp-algorithms.com/graph/hungarian-algorithm.html.  
+
 [4]The Munkres Assignment Algorithm (Hungarian Algorithm). YouTube. Accessed September 13, 2025. https://www.youtube.com/watch?v=cQ5MsiGaDY8&t=290s&pp=ygUdaHVuZ2FyaWFuIGFsZ29yaXRobSBleHBsYWluZWQ%3D. 
