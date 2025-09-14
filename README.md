@@ -5,7 +5,6 @@ The assignment problem is a classical optimization problem where the goal is to 
 ### Section 2: Model Assumptions
 - Each doctor provides a complete ranking of all hospitals with no ties or missing values
 - Hospitals do not rank doctors, only doctors rank hospitals
-- Each hospital has a capacity currently all set to 1 **remove this - Jonathan**
 - The total capacity may differ from the number of doctors (N is not always equal to K). Our implementation handles this by:
   - Duplicating hospital columns to represent multiple slots
   - Adding “no match” dummy columns/rows to make the cost matrix square
