@@ -67,7 +67,7 @@ def prep_data(raw_data):
     # Create new columns filled with zeros
         for i in range(num_cols, target_dim):
             #theres more doctors than positions
-            base_data['No Match'] = 0
+            base_data['No Match ' + position_lettering[i]] = 0
     return base_data
 
 
@@ -91,9 +91,8 @@ def get_score (prepped_df, solution_matrix):
 
 
 if __name__ == "__main__":
-    df = import_data('BDD Test.csv')
+    df = import_data('Test_VarB.csv')
     hi = get_doctors(df)
     lo = get_hospital_info(df)
-    row, col = np.where(df==0)
-    print(hi[1], lo.columns[0])
-    print(row, col)
+    print(prep_data_step1(df))
+    print(prep_data(df))
