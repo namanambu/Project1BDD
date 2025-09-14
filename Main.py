@@ -31,7 +31,7 @@ def Match_Residents(assignments, prepped_data, num_doctors):
 
 
 
-df = HAID.import_data('Large_Test.csv')
+df = HAID.import_data('Test_VarB.csv')
 hi = HAID.get_hospital_info(df)
 prepped_df = HAID.prep_data(df)
 prepped_array = prepped_df.to_numpy(copy = True)
