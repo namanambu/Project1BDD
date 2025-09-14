@@ -31,7 +31,7 @@ def Match_Residents(assignments, prepped_data, num_doctors):
 
 
 
-df = HAID.import_data('Test_VarB.csv')
+df = HAID.import_data('Test_VarH.csv')
 hi = HAID.get_hospital_info(df)
 prepped_df = HAID.prep_data(df)
 prepped_array = prepped_df.to_numpy(copy = True)
@@ -41,7 +41,8 @@ reduced_matrix = HAS.step2_col_reduction(HAS.step1_row_reduction(prepped_array))
 row_lines, col_lines, marked_zeros = HAL.Step_3_Line_Check(reduced_matrix)
 
 while len(row_lines) + len(col_lines) != len(reduced_matrix):
-    new_matrix = HAS.step4_adjust_matrix(row_lines, col_lines)
+    print("step4")
+    new_matrix = HAS.step4_adjust_matrix(reduced_matrix, row_lines, col_lines)
     row_lines, col_lines, marked_zeros = HAL.Step_3_Line_Check(new_matrix)
 
 assignments = HAL.STEP5_find_solution(marked_zeros)
