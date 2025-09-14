@@ -24,28 +24,48 @@ def step2_col_reduction(M):
    col_mins = M.min(axis=0, keepdims=True) # shape (1, n_cols)
    return M - col_mins 
 
-def step4_adjust_matrix(M, row_covered, col_covered):
+def step4_adjust_matrix(M, row_covered, col_covered, eps=1e-12):
   """
     Step 4: Only run this if Step 3 wasn't optimal yet.
     Make new zeros in places that aren't covered by any line.
-      - find the smallest uncovered value m
-      - subtract m from all uncovered cells
-      - add m to cells at COVERED row ∩ COVERED col
-    Then go back to Step 3 and try again.
+        1) Find m = smallest *positive* uncovered finite value.
+        2) Subtract m from all uncovered cells.
+        3) Add m to cells at (covered row ∩ covered col).
+    Notes:
+        - If no positive uncovered values exist (uncovered region all zeros),
+          return and let Step 3 add another covering line.
+        - Inputs are coerced to boolean masks; tiny float noise is zeroed.
     """
-  M = M.astype(float).copy()
-  # Cells with NO row line and NO column line = "uncovered"
-  uncovered = (~row_covered)[:, None] & (~col_covered)[None, :]
-  if not np.any(uncovered):
-      return M  # nothing to adjust
-  
-  m = M[uncovered].min() # m = smallest number sitting in the uncovered region
+  # 1) normalize
+    M = np.asarray(M, dtype=float).copy()
+    row_covered = np.asarray(row_covered, dtype=bool).reshape(-1)
+    col_covered = np.asarray(col_covered, dtype=bool).reshape(-1)
 
-  # subtract from uncovered entries, at least one of them becomes 0
-  M[uncovered] -= m
+    if M.shape != (row_covered.size, col_covered.size):
+        raise ValueError(
+            f"Shape mismatch: M{M.shape} vs row_covered{row_covered.shape} / col_covered{col_covered.shape}"
+        )
 
-  # add to intersections of covered rows & covered columns
-  intersections = (row_covered[:, None] & col_covered[None, :])
-  M[intersections] += m
+    # 2) uncovered region mask
+    uncovered = (~row_covered)[:, None] & (~col_covered)[None, :]
+    if not np.any(uncovered):
+        return M
 
-  return M
+    # 3) pick smallest *positive* uncovered finite value
+    finite = np.isfinite(M)
+    candidates = uncovered & finite & (M > eps)
+    if not np.any(candidates):
+        # all uncovered entries are already zero (or non-finite)
+        return M
+
+    m = M[candidates].min()
+
+    # 4) update
+    M[uncovered] -= m
+    intersections = (row_covered[:, None] & col_covered[None, :])
+    if np.any(intersections):
+        M[intersections] += m
+
+    # 5) clean float fuzz
+    M[np.abs(M) < eps] = 0.0
+    return M
