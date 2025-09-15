@@ -9,6 +9,7 @@ The assignment problem is a classical optimization problem where the goal is to 
   - Duplicating hospital columns to represent multiple slots
   - Adding “no match” dummy columns/rows to make the cost matrix square
 - Doctors can be unmatched if no hospital slots remain
+- Any named hospital must have at least one position available
 - Ties between equally optimal assignments are broken arbitrarily, with priority given to unique solution choices
 - Objective considers rankings only and no other factors
 - Assumes reasonable penalty for “no match” so it is only chosen if necessary **explicitly define the value - Jonathan**
