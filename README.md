@@ -1,6 +1,6 @@
 ### Section 1: Background on Hungarian Algorithm and Objective
 
-The assignment problem is a classical optimization problem where the goal is to select the maximum matching with the lowest possible cost. In mathematical terms, it boils down to finding a minimum-weight matching in a bipartite graph, where each agent–task pairing carries a weight that reflects how suitable that match is. To solve this type of problem efficiently, Harold Kuhn published the Hungarian algorithm in 1955.<sup>[1]</sup> The method works by transforming the cost matrix through row and column reductions and iteratively uncovering zeros until an optimal set of pairings is reached.<sup>[2]</sup> In our project, we used this approach by converting doctors’ ranked hospital preferences into a cost matrix and applying the algorithm to generate assignments that minimize overall dissatisfaction, bound by hospital capacity limits. **Are we defining the objective as minimize dissatisfaction or maximize satisfaction? - Jonathan**
+The assignment problem is a classical optimization problem where the goal is to select the maximum matching with the lowest possible cost. In mathematical terms, it boils down to finding a minimum-weight matching in a bipartite graph, where each agent–task pairing carries a weight that reflects how suitable that match is. To solve this type of problem efficiently, Harold Kuhn published the Hungarian algorithm in 1955.<sup>[1]</sup> The method works by transforming the cost matrix through row and column reductions and iteratively uncovering zeros until an optimal set of pairings is reached.<sup>[2]</sup> In our project, we used this approach by converting doctors’ ranked hospital preferences into a cost matrix and applying the algorithm to generate assignments that maximizes satisfaction, bound by hospital capacity limits.
 
 ### Section 2: Model Assumptions
 - Each doctor provides a complete ranking of all hospitals with no ties or missing values
@@ -12,8 +12,6 @@ The assignment problem is a classical optimization problem where the goal is to 
 - Any named hospital must have at least one position available
 - Ties between equally optimal assignments are broken arbitrarily, with priority given to unique solution choices
 - Objective considers rankings only and no other factors
-- Assumes reasonable penalty for “no match” so it is only chosen if necessary **explicitly define the value - Jonathan**
-- The difference between rank 1 and 2 is treated the same as between 2 and 3 **what? - Jonathan**
 - Hungarian algorithm always produces a solution
 - If multiple optimal solutions exist, the particular assignment chosen depends on how zeros are marked/traversed in the algorithm
 - Hungarian is fine for small or medium test cases but could become slow for very large datasets **quantitative size and duration - Jonathan**
