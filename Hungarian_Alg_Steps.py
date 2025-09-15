@@ -50,8 +50,10 @@ def step4_adjust_matrix(M, row_covered, col_covered, eps=1e-12):
 
     # 2) uncovered region mask
     uncovered = (~row_covered)[:, None] & (~col_covered)[None, :]
-    print(uncovered)
+
+
     if not np.any(uncovered):
+        print("none found")
         return M
 
     # 3) pick smallest *positive* uncovered finite value
@@ -62,6 +64,7 @@ def step4_adjust_matrix(M, row_covered, col_covered, eps=1e-12):
         return M
 
     m = M[candidates].min()
+    print
 
     # 4) update
     M[uncovered] -= m
