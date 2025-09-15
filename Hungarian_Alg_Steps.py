@@ -23,82 +23,45 @@ def step2_col_reduction(M):
    M = M.astype(float).copy() # work on a float copy so we don't mutate the original
    col_mins = M.min(axis=0, keepdims=True) # shape (1, n_cols)
    return M - col_mins 
-    
+
+ 
 def step4_adjust_matrix(M, row_covered, col_covered, eps=1e-12):
+    """
+    Step 4: Adjustment
+    When Step 3 isn't optimal yet:
+    - Find the smallest uncovered value.
+    - Subtract it from all uncovered cells.
+    - Add it back to cells at (covered row ∩ covered col).
+    """
     M = np.asarray(M, dtype=float).copy()
 
     row_cov_set = set(int(r) for r in row_covered)
     col_cov_set = set(int(c) for c in col_covered)
 
     n_rows, n_cols = M.shape
-
+    # Collect all values that are in the uncovered region
     non_zero_element = []
     for r in range(n_rows):
-        if r not in row_cov_set:
+        if r not in row_cov_set:            # only rows that are NOT covered
             for c in range(n_cols):
-                if c not in col_cov_set:
+                if c not in col_cov_set:    # only cols that are NOT covered
                     non_zero_element.append(M[r, c])
 
-    if not non_zero_element:
+    if not non_zero_element:    # no uncovered cells means nothing to adjust
         return M
 
-    min_num = min(non_zero_element)
-
+    min_num = min(non_zero_element)    # smallest uncovered value
+    
+    # Subtract min from every uncovered cell
     for r in range(n_rows):
         if r not in row_cov_set:
             for c in range(n_cols):
                 if c not in col_cov_set:
                     M[r, c] = M[r, c] - min_num
-
+                    
+    # Add min to cells at (covered row ∩ covered col)
     for r in row_cov_set:
         for c in col_cov_set:
             M[r, c] = M[r, c] + min_num
 
     return M
-
-
-'''def step4_adjust_matrix(M, row_covered, col_covered, eps=1e-12):
-  """
-    Step 4: Only run this if Step 3 wasn't optimal yet.
-    Make new zeros in places that aren't covered by any line.
-        1) Find m = smallest *positive* uncovered finite value.
-        2) Subtract m from all uncovered cells.
-        3) Add m to cells at (covered row ∩ covered col).
-    Notes:
-        - If no positive uncovered values exist (uncovered region all zeros),
-          return and let Step 3 add another covering line.
-        - Inputs are coerced to boolean masks; tiny float noise is zeroed.
-    """
-  # 1) normalize
-    M = np.asarray(M, dtype=float).copy()
-    row_covered = np.asarray(row_covered, dtype=bool).reshape(-1)
-    col_covered = np.asarray(col_covered, dtype=bool).reshape(-1)
-
-    if M.shape != (row_covered.size, col_covered.size):
-        raise ValueError(
-            f"Shape mismatch: M{M.shape} vs row_covered{row_covered.shape} / col_covered{col_covered.shape}"
-        )
-
-    # 2) uncovered region mask
-    uncovered = (~row_covered)[:, None] & (~col_covered)[None, :]
-    if not np.any(uncovered):
-        return M
-
-    # 3) pick smallest *positive* uncovered finite value
-    finite = np.isfinite(M)
-    candidates = uncovered & finite & (M > eps)
-    if not np.any(candidates):
-        # all uncovered entries are already zero (or non-finite)
-        return M
-
-    m = M[candidates].min()
-
-    # 4) update
-    M[uncovered] -= m
-    intersections = (row_covered[:, None] & col_covered[None, :])
-    if np.any(intersections):
-        M[intersections] += m
-
-    # 5) clean float fuzz
-    M[np.abs(M) < eps] = 0.0
-    return M'''
