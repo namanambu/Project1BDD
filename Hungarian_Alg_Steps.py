@@ -24,8 +24,8 @@ def step2_col_reduction(M):
    col_mins = M.min(axis=0, keepdims=True) # shape (1, n_cols)
    return M - col_mins 
 
-def step4_adjust_matrix(M, row_covered, col_covered, eps=1e-12):
-  """
+
+"""
     Step 4: Only run this if Step 3 wasn't optimal yet.
     Make new zeros in places that aren't covered by any line.
         1) Find m = smallest *positive* uncovered finite value.
@@ -36,18 +36,21 @@ def step4_adjust_matrix(M, row_covered, col_covered, eps=1e-12):
           return and let Step 3 add another covering line.
         - Inputs are coerced to boolean masks; tiny float noise is zeroed.
     """
-  # 1) normalize
+def step4_adjust_matrix(M, row_covered, col_covered, eps=1e-12):
+  
+    # 1) normalize
     M = np.asarray(M, dtype=float).copy()
     row_covered = np.asarray(row_covered, dtype=bool).reshape(-1)
     col_covered = np.asarray(col_covered, dtype=bool).reshape(-1)
 
-    if M.shape != (row_covered.size, col_covered.size):
+    '''if M.shape != (row_covered.size, col_covered.size):
         raise ValueError(
             f"Shape mismatch: M{M.shape} vs row_covered{row_covered.shape} / col_covered{col_covered.shape}"
-        )
+        )'''
 
     # 2) uncovered region mask
     uncovered = (~row_covered)[:, None] & (~col_covered)[None, :]
+    print(uncovered)
     if not np.any(uncovered):
         return M
 
