@@ -177,3 +177,25 @@ def match_residents(assignments, raw_data):
     matches_df = pd.DataFrame(matches)
 
     return matches_df
+
+def match_residents_numeric(assignments, prepped_data, num_doctors):
+
+    doctor_names = list(prepped_data.index[:num_doctors])  # First `num_doctors` rows, rest are extra
+    hospital_names = list(prepped_data.columns) 
+
+    # Filter assignments to only include actual doctors (rows < num_doctors)
+    filtered_assignments = [pair for pair in assignments if pair[0] < num_doctors]
+
+    # Prepare list of matches
+    matches = []
+    for row, col in filtered_assignments:
+        doctor = doctor_names[row]  # Map row index to actual doctor name
+        hospital = hospital_names[col]  # Map column index to hospital position name
+
+        # Append to matches list
+        matches.append({"Doctor": doctor, "Hospital Position": hospital})
+
+    # Convert matches list to a DataFrame
+    matches_df = pd.DataFrame(matches)
+
+    return matches_df
