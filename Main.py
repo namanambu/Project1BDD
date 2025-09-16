@@ -6,7 +6,7 @@ from datetime import datetime as dt
 start = dt.now() # Start timer
 
 
-df = HAID.import_data('Large_Test_500x50.csv') # A csv file in format from README.md
+df = HAID.import_data('Tests/Large_Test.csv') # A csv file in format from README.md
 prepped_df = HAID.prep_data(df)
 prepped_array = prepped_df.to_numpy(copy = True)
 
