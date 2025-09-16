@@ -30,7 +30,7 @@ The assignment problem is a classical optimization problem where the goal is to 
      - Step 4: Adjust the matrix when coverage is insufficient
      - Step 5: Extract optimal assignments from zero positions
 - We wrote helper functions to map matrix indices back to actual doctor and hospital names, and return results as a clean pandas dataframe
-- To evaluate results, we defined a scoring function that sums the rank costs of assigned matches and compares this to a maximum possible dissatisfaction score. This gave us a percentage measure of solution quality ($ \left( 1 - \frac{\text{score}}{\text{max\_score}} \right) \times 100 \% $)
+- To evaluate results, we defined a scoring function that sums the rank costs of assigned matches and compares this to a maximum possible dissatisfaction. This gave us a percentage measure of solution quality ($ \left( 1 - \frac{\text{score}}{\text{max\_score}} \right) \times 100 \% $), which increases with participant satisfaction. 
 - By separating data import, preprocessing, algorithm steps, and output formatting into different modules, we kept the code design flexible and easy to maintain
 
 ### Section 4: Labour Division
