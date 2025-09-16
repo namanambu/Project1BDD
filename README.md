@@ -73,3 +73,5 @@ Our code is split into several files to maintain an orderly, modular structure:
 [3]Hungarian algorithm for solving the assignment problem. Hungarian Algorithm - Algorithms for Competitive Programming. December 13, 2023. Accessed September 13, 2025. https://cp-algorithms.com/graph/hungarian-algorithm.html.  
 
 [4]The Munkres Assignment Algorithm (Hungarian Algorithm). YouTube. Accessed September 13, 2025. https://www.youtube.com/watch?v=cQ5MsiGaDY8&t=290s&pp=ygUdaHVuZ2FyaWFuIGFsZ29yaXRobSBleHBsYWluZWQ%3D. 
+
+[5] Eason. (2021, August 2). Hungarian Algorithm Introduction & Python Implementation. Medium; Python in Plain English. https://python.plainenglish.io/hungarian-algorithm-introduction-python-implementation-93e7c0890e15.
