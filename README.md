@@ -50,6 +50,19 @@ Our code is split into several files to maintain an orderly, modular structure:
 - Hungarian_Alg_LineCheck.py: handles crossing out zeros (Step 3), the final assignment step (Step 5), and mapping results back to doctor and hospital names
 - README.md: Contains this specific project write up and description
 - CSV files: different test datasets we used to check the algorithm's implementation
+- Tests: Folder with all the tests as outlined below
+    - Test_VarA: Checks that the algorithm correctly handles a trivial one-to-one assignment with no conflicts
+    - Test_VarB: Checks oversubscription handling where excess doctors are correctly left unmatched
+    - Test_VarC: Checks tie resolution when all doctors share identical preferences but capacity is limited
+    - Test_VarD: Checks undersubscription handling which is if all doctors are matched when hospital capacity is sufficient
+    - Test_VarE: Checks that the algorithm handles cases where most doctors have no acceptable hospitals
+    - Test_VarF: Checks Hungarian algorithm Step-4 adjustment for convergence to the minimal cost assignment
+    - Test_VarG: Checks correct handling of ties in preferences without violating feasibility
+    - vid_test: Checks that the algorithm goes through Step-4 and still finds the correct optimal assignment (example from the hungarian algorithm demo video we watched)
+    - Large test cases: These files are used to benchmark performance and measure how long the algorithm takes on bigger inputs
+    - Large_Test.csv → moderate-sized dataset for baseline runtime
+    - Large_Test_500.csv → larger dataset (~500 rows) to test scaling
+    - Large_Test_500x50.csv → very large dataset (500×50) for stress-testing efficiency
 
 ### References (cited):
 
