@@ -1,10 +1,8 @@
-import numpy as np
-import pandas as pd 
 import Hungarian_Alg_Steps as HAS
 import Hungarian_Alg_LineCheck as HAL
 import HungarianAlgoImportData as HAID
 
-df = HAID.import_data('Large_Test.csv')
+df = HAID.import_data('Large_Test_500x50.csv')
 hi = HAID.get_hospital_info(df)
 prepped_df = HAID.prep_data(df)
 prepped_array = prepped_df.to_numpy(copy = True)

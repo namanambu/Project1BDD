@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import warnings
 
 
 def import_data(file):
@@ -51,8 +52,8 @@ def prep_data(raw_data):
         if num_positions > 1:
             
             for i in range(num_positions - 1):
-                base_data[column + position_lettering[i+1]] = base_data[column]
-            base_data = base_data.rename(columns={column: column + position_lettering[0]})
+                base_data[column + '_' + str(i+1)] = base_data[column]
+            base_data = base_data.rename(columns={column: column + '_' + str(0)})
     #pad to make square
     num_rows, num_cols = base_data.shape
     target_dim = max(num_rows, num_cols)
@@ -67,7 +68,7 @@ def prep_data(raw_data):
     # Create new columns filled with zeros
         for i in range(num_cols, target_dim):
             #theres more doctors than positions
-            base_data['No Match ' + position_lettering[i]] = 0
+            base_data['No Match' + '_' + str(i)] = 0
     return base_data
 
 
@@ -86,7 +87,7 @@ def get_score (prepped_df, solution_matrix):
     return score, max_total
     
 
-
+warnings.filterwarnings('ignore')
     
 
 
